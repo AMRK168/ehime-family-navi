@@ -1,17 +1,81 @@
-# ehime_family_navi
+# えひめファミリーナビ
 
-A new Flutter project.
+愛媛県の子育て世代向けお出かけ支援アプリ。地域イベント情報の閲覧、QRチェックインによるポイント獲得、家族・コミュニティグループ管理、福利厚生連携などを提供します。
 
-## Getting Started
+## ⚠️ 対応プラットフォーム
 
-This project is a starting point for a Flutter application.
+**本アプリはWebブラウザ版（Chrome）での動作を前提に開発しています。**
 
-A few resources to get you started if this is your first Flutter project:
+- ✅ Chrome（推奨）
+- ✅ Edge, Firefox 等のモダンブラウザ
+- ❌ iOS シミュレータ / 実機（未対応・動作不安定）
+- ❌ Android エミュレータ / 実機（未検証）
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+> iOS/Android向けのビルドファイル（`ios/`, `android/`）はFlutterのプロジェクト生成時に自動作成されたものであり、ネイティブ環境での動作は保証していません。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 起動手順
+
+### 前提条件
+
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) がインストール済み（3.x系推奨）
+- Chrome ブラウザがインストール済み
+
+### セットアップ & 起動
+
+```bash
+# 1. リポジトリをクローン
+git clone https://github.com/AMRK168/ehime-family-navi.git
+cd ehime-family-navi
+
+# 2. 依存パッケージを取得
+flutter pub get
+
+# 3. Webブラウザで起動
+flutter run -d chrome --web-port=8080
+```
+
+ブラウザが自動で開き、`http://localhost:8080` でアプリが表示されます。
+
+### Flutter環境確認
+
+```bash
+flutter doctor
+```
+
+`Chrome` の欄に ✓ がついていれば起動可能です。
+
+## 📋 主な機能
+
+| 機能 | 説明 |
+|------|------|
+| イベント掲示板 | 地域イベント一覧・詳細表示、カテゴリフィルタ |
+| QRチェックイン | イベント会場でのNFCタッチ/QR提示によるチェックイン |
+| ポイントシステム | チェックインで獲得、スポンサーランクによる倍率変動 |
+| グループ管理 | 家族グループ・一般グループ、5段階権限システム |
+| 設定画面 | テーマカラー即反映、ダークモード、チェックイン方式選択 |
+| 福利厚生連携IF | 外部福利厚生会社とのOAuth認証連携インターフェース |
+
+## 🏗️ アーキテクチャ
+
+```
+lib/
+├── config/          # フィーチャーフラグ
+├── data/
+│   ├── mock/        # モック実装（Hive永続化）
+│   └── providers/   # Riverpod DIプロバイダー
+├── domain/
+│   ├── models/      # ドメインモデル
+│   └── repositories/ # 抽象インターフェース
+├── presentation/    # UI層（画面単位）
+└── services/        # ビジネスロジック
+```
+
+- **クリーンアーキテクチャ**: 抽象インターフェース + モック実装 + Riverpod DI
+- **フィーチャーフラグ**: 機能の段階的有効化が可能
+- **外部API通信なし**: 全てモックデータで動作（デモ版）
+
+## 📝 補足
+
+- 本プロジェクトは河原電子ビジネス専門学校のコンテスト向けプロトタイプです
+- 全データはローカル（Hive）に保存され、外部サーバーとの通信は一切行いません
+- 将来的にAWS（API Gateway / Lambda / DynamoDB）への移行を想定した設計になっています
